@@ -1,0 +1,7 @@
+Một biến môi trường NGINX_ENVIRONMENT được đặt trong các dịch vụ Nginx để chỉ định môi trường (development, production, hoặc staging).
+Một biến môi trường SERVICE_ENVIRONMENT được đặt trong các dịch vụ microservice để chỉ định môi trường tương ứng.
+Profiles được định nghĩa cho mỗi môi trường (production, staging, development), mỗi profile cung cấp các giá trị biến môi trường tương ứng cho dịch vụ.
+Khi chạy Docker Compose, bạn có thể chỉ định profile sử dụng cờ --profile:
+docker-compose --profile production up
+docker-compose --profile staging up
+docker-compose --profile development up

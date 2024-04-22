@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  nginx_service1:
+    build:
+      context: ./service1/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./service1/nginx:/etc/nginx/conf.d/
+      - ./service1:/var/www/html/service1
+    ports:
+      - "8000:80"
+    networks:
+      - networks_app
+
+  db_server1:
+    image: mysql:8.0
+    container_name: db_server1
+    restart: unless-stopped
+    environment:
+        MYSQL_DATABASE: db_hoanguyencoder
+        MYSQL_ROOT_PASSWORD: 12345678
+        MYSQL_PASSWORD: 12345678
+        MYSQL_USER: hoanguyencoder
+        SERVICE_TAGS: dev
+        SERVICE_NAME: mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./service1/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - networks_app
+  
+
+  nginx_service2:
+    build:
+      context: ./service2/nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./service2/nginx:/etc/nginx/conf.d/
+      - ./service2:/var/www/html/service2
+    ports:
+      - "8001:80"
+    networks:
+      - networks_app
+
+
+  service1:
+    build:
+      context: ./service1
+      dockerfile: Dockerfile.php7
+    volumes:
+      - ./service1:/var/www/html/service1
+    networks:
+      - networks_app
+   
+  service2:
+    build:
+      context: ./service2
+      dockerfile: Dockerfile
+    volumes:
+      - ./service2:/var/www/html/service2
+    networks:
+      - networks_app
+
+
+networks:
+  networks_app:
+    driver: bridge
